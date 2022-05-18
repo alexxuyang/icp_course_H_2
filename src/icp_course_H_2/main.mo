@@ -53,6 +53,9 @@ actor class() = self {
       finished = false;
     };
 
+    Debug.print(debug_show(msg.caller, "PROPOSED", proposal.ptype, "Proposal ID", proposal.id));
+    Debug.print(debug_show());
+
     proposals.add(proposal);
 
     proposal
@@ -91,7 +94,7 @@ actor class() = self {
 
           proposal := Types.update_canister_id(proposal, result.canister_id);
         };
-          
+        
         case (#installCode) {
           await ic.install_code({
             arg = [];
@@ -125,6 +128,9 @@ actor class() = self {
       proposal := Types.finish_proposer(proposal);
     }; // if (proposal.approvers.size() == M)
 
+    Debug.print(debug_show(msg.caller, "APPROVED", proposal.ptype, "Proposal ID", proposal.id, "Executed", proposal.finished));
+    Debug.print(debug_show());
+
     proposals.put(id, proposal);
     proposals.get(id)
   };
@@ -146,7 +152,7 @@ actor class() = self {
   };
 
   public shared (msg) func init(list : [Owner], m : Nat) : async Nat {
-    assert(m <= list.size());
+    assert(m <= list.size() and m >= 1);
 
     if (ownerList.size() != 0) {
       return M
@@ -155,6 +161,8 @@ actor class() = self {
     ownerList := list;
     M := m;
     N := list.size();
+
+    Debug.print(debug_show("Caller: ", msg.caller, ". Iint with owner list: ", list, "M=", M, "N=", N));
 
     M
   };
