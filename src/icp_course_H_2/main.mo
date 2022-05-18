@@ -33,25 +33,25 @@ actor class() = self {
         assert(owner_check(msg.caller));
 
         if (ptype == #installCode) {
-        assert(Option.isSome(wasm_code));
+            assert(Option.isSome(wasm_code));
         };
 
         if (ptype != #createCanister) {
-        assert(Option.isSome(canister_id));
+            assert(Option.isSome(canister_id));
         };
 
         if (Option.isSome(canister_id)) {
-        assert(canister_check(Option.unwrap(canister_id)));
+            assert(canister_check(Option.unwrap(canister_id)));
         };
 
         let proposal : Proposal = {
-        id = proposals.size();
-        wasm_code;
-        ptype;
-        proposer = msg.caller;
-        canister_id;
-        approvers = [];
-        finished = false;
+            id = proposals.size();
+            wasm_code;
+            ptype;
+            proposer = msg.caller;
+            canister_id;
+            approvers = [];
+            finished = false;
         };
 
         proposals.add(proposal);
@@ -74,57 +74,57 @@ actor class() = self {
         proposal := Types.add_approver(proposal, msg.caller);
 
         if (proposal.approvers.size() == M) { // meet the threashhold and do the operation
-        let ic : IC.Self = actor("aaaaa-aa");
+            let ic : IC.Self = actor("aaaaa-aa");
 
-        switch (proposal.ptype) {
-            case (#createCanister) {
-            let settings : IC.canister_settings = 
-            {
-                freezing_threshold = null;
-                controllers = ?[Principal.fromActor(self)];
-                memory_allocation = null;
-                compute_allocation = null;
-            };
+            switch (proposal.ptype) {
+                case (#createCanister) {
+                    let settings : IC.canister_settings = 
+                    {
+                        freezing_threshold = null;
+                        controllers = ?[Principal.fromActor(self)];
+                        memory_allocation = null;
+                        compute_allocation = null;
+                    };
 
-            let result = await ic.create_canister({settings = ?settings});
+                    let result = await ic.create_canister({settings = ?settings});
 
-            ownedCanisters := Array.append(ownedCanisters, [result.canister_id]);
+                    ownedCanisters := Array.append(ownedCanisters, [result.canister_id]);
 
-            proposal := Types.update_canister_id(proposal, result.canister_id);
-            };
-            
-            case (#installCode) {
-            await ic.install_code({
-                arg = [];
-                wasm_module = Blob.toArray(Option.unwrap(proposal.wasm_code));
-                mode = #install;
-                canister_id = Option.unwrap(proposal.canister_id);
-            });
-            };      
-            case (#uninstallCode) {
-            await ic.uninstall_code({
-                canister_id = Option.unwrap(proposal.canister_id);
-            });
-            };
-            case (#startCanister) {
-            await ic.start_canister({
-                canister_id = Option.unwrap(proposal.canister_id);
-            });
-            };
-            case (#stopCanister) {
-            await ic.stop_canister({
-                canister_id = Option.unwrap(proposal.canister_id);
-            });
-            };
-            case (#deleteCanister) {
-            await ic.delete_canister({
-                canister_id = Option.unwrap(proposal.canister_id);
-            });
-            };
-        };
+                    proposal := Types.update_canister_id(proposal, result.canister_id);
+                };
+                
+                case (#installCode) {
+                    await ic.install_code({
+                        arg = [];
+                        wasm_module = Blob.toArray(Option.unwrap(proposal.wasm_code));
+                        mode = #install;
+                        canister_id = Option.unwrap(proposal.canister_id);
+                    });
+                };      
+                case (#uninstallCode) {
+                    await ic.uninstall_code({
+                        canister_id = Option.unwrap(proposal.canister_id);
+                    });
+                };
+                case (#startCanister) {
+                    await ic.start_canister({
+                        canister_id = Option.unwrap(proposal.canister_id);
+                    });
+                };
+                case (#stopCanister) {
+                    await ic.stop_canister({
+                        canister_id = Option.unwrap(proposal.canister_id);
+                    });
+                };
+                case (#deleteCanister) {
+                    await ic.delete_canister({
+                        canister_id = Option.unwrap(proposal.canister_id);
+                    });
+                };
+            }; // switch
 
-        proposal := Types.finish_proposer(proposal);
-        };
+            proposal := Types.finish_proposer(proposal);
+        }; // if (proposal.approvers.size() == M)
 
         proposals.put(id, proposal);
         proposals.get(id)
@@ -150,7 +150,7 @@ actor class() = self {
         assert(m <= list.size());
 
         if (ownerList.size() != 0) {
-        return M
+            return M
         };
 
         ownerList := list;
