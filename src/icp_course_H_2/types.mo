@@ -5,7 +5,7 @@ import Principal "mo:base/Principal";
 module {
 	public type Owner = Principal;
 	public type Canister = Principal;
-	public type ID = Nat;
+	public type  ID = Nat;
 
 	public type Proposal = {
 		id: ID;
