@@ -10,6 +10,8 @@ import canister = "rrkah-fqaaa-aaaaa-aaaaq-cai";
 // setup three Principals, multi-sig model is 2 / 3 
 call canister.init(vec {principal "cnh44-cjhoh-yyoqz-tcp2t-yto7n-6vlpk-xw52p-zuo43-rrlge-4ozr5-6ae"; principal "ndb4h-h6tuq-2iudh-j3opo-trbbe-vljdk-7bxgi-t5eyp-744ga-6eqv6-2ae"; principal "lzf3n-nlh22-cyptu-56v52-klerd-chdxu-t62na-viscs-oqr2d-kyl44-rqe"}, 2);
 
+//---------------CREATE CANISTER---------------//
+
 // propose to create a canister by id1
 call canister.propose(variant {createCanister}, null, null);
 let proposal_id1 = _.id;
@@ -24,6 +26,8 @@ identity default "./id2.pem";
 call canister.approve(proposal_id1);
 
 let canister_id = _.canister_id?;
+
+//---------------INSTALL CODE---------------//
 
 // change to id1
 identity default "./id1.pem";
@@ -41,6 +45,8 @@ identity default "./id2.pem";
 // approve the above proposal by id2, and execute the installing code
 call canister.approve(proposal_id2);
 
+//---------------START CANISTER---------------//
+
 // change to id1
 identity default "./id1.pem";
 
@@ -57,5 +63,9 @@ identity default "./id2.pem";
 // approve the above proposal by id2, and execute the starting canister
 call canister.approve(proposal_id3);
 
+//---------------CALL CANISTER---------------//
+
 // call the installed canister
 call canister_id.greet("world");
+
+assert _ == "Hello, world!";

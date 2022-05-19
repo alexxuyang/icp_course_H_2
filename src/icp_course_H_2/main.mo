@@ -1,4 +1,5 @@
 import Array "mo:base/Array";
+import Error "mo:base/Error";
 import Buffer "mo:base/Buffer";
 import Debug "mo:base/Debug";
 import Blob "mo:base/Blob";
@@ -39,8 +40,9 @@ actor class() = self {
       assert(Option.isSome(canister_id));
     };
 
-    if (Option.isSome(canister_id)) {
-      assert(canister_check(Option.unwrap(canister_id)));
+    switch (canister_id) {
+      case (?id) assert(canister_check(id));
+      case (null) {};
     };
 
     let proposal : Proposal = {
@@ -94,7 +96,6 @@ actor class() = self {
 
           proposal := Types.update_canister_id(proposal, result.canister_id);
         };
-        
         case (#installCode) {
           await ic.install_code({
             arg = [];
