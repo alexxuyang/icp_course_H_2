@@ -69,8 +69,11 @@ propose(ptype: ProposalType, canister_id: ?Canister, wasm_code: ?Blob) : async P
 ```
 
 发起提议时，需要根据提议类型，提供可选的**canister_id** 以及 **wasm_code**
+
 当提议类型不是创建canister时，需要提供**canister_id**
+
 当提议类型是安装代码时，需要提供**wasm_code**
+
 发起提议，返回**proposal**
 
 支持提议定义：
