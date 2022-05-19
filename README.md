@@ -111,7 +111,9 @@ dfx depoly
 ic-repl ./create-install-start-call.sh
 ```
 
-测试案例一，包括了创建canister、安装代码、启动canister、调用canister。这里每一步，都是通过提议、多签方式进行提案与审批的。
+测试案例一，包括了创建canister、安装代码、启动canister、调用canister。
+
+除了调用canister，其它三步，都是通过提议、多签方式进行提案与审批的。
 
 最后可以看到调用到了动态生成的智能合约的结果（greet合约）：
 
@@ -151,5 +153,6 @@ ic-repl ./create-install-start-call.sh
 ic-repl ./create-install-start-call-stop-uninstall-delete.sh
 ```
 
-测试案例二，包括了创建canister、安装代码、启动canister、调用canister、停止canister、删除代码、删除canister。这里每一步，都是通过提议、多签方式进行提案与审批的。
+测试案例二，包括了创建canister、安装代码、启动canister、调用canister、停止canister、删除代码、删除canister。
 
+除了调用canister，其它六步，都是通过提议、多签方式进行提案与审批的。
